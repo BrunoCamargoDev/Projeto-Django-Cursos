@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+ <html>
+ <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>{% block title %}{% endblock %}</title>
+   <style>
+     body {
+         height: 100%;
+         width: 100%;
+         font-family: 'Open Sans', sans-serif;
+         background-color: #f7f7f7;
+         color: #333;
+         margin: 0;
+         padding: 0;
+     }
+ 
+     header {
+         background-color: #0096c7;
+         color: #fff;
+         text-align: center;
+     }
+
+ 
+     footer {
+         background-color: #ccc;
+         color: #333;
+         text-align: center;
+         position: absolute;
+         bottom: 0;
+         width: 100%;
+         padding-top: 10px;
+         padding-bottom: 10px;
+     }
+ 
+     nav {
+         background-color: #0096c7;
+         color: #fff;
+         height: 50px;
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+     }
+ 
+     nav ul {
+         list-style: none;
+         margin: 0;
+         padding: 0;
+         display: flex;
+     }
+ 
+     nav ul li {
+         margin: 0 10px;
+     }
+ 
+     nav ul li a {
+         color: #fff;
+         text-decoration: none;
+         font-size: 16px;
+         padding: 15px;
+         transition: all 0.3s ease;
+     }
+ 
+     nav ul li a:hover {
+         background-color: #32bbe8;
+     }
+ 
+     nav ul li.active a {
+         background-color: #666;
+     }
+ 
+     nav ul li.active a:hover {
+         background-color: #999;
+     }
+    a {
+      text-decoration: none;
+      color: black;
+    }
+   </style>
+ </head>
+ <body>
+   <header>
+     <nav style="display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;">
+
+       <ul style="display: flex; list-style: none; margin: 0; padding: 0;">
+
+        {% if user.is_authenticated %}
+          <li><a href="{% url 'logout' %}">Logout</a></li>
+        {% else %}
+          <li><a href="{% url 'login' %}">Login</a></li>
+          <li><a href="{% url 'usuario' %}">Registre</a></li>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+        <div style="color: white; position: absolute; right: 10px; padding-right: 10px; font-size: 18px;">
+          Olá, {{ user.username }}
+        </div>
+        {% endif %}
+       </ul>
+     </nav>
+   </header>
+ 
+   <main>
+     {% block content %}
+     {% endblock %}
+   </main>
+ 
+   <footer>
+     <p>&copy; ETEC Elias Nechar - Curso Tecnico DS</p>
+   </footer>
+ </body>
+ </html>

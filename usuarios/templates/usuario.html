@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="formulario"><form method="POST">
+
+    {% csrf_token %}
+    <div class="form-group">
+        {{ user_form.username.errors }}
+        <label>Nome de Usuário:</label> 
+        {{ user_form.username }}<br>
+    </div>
+    <div class="form-group">
+        {{ user_form.password1.errors }}
+        <label>Senha:</label> 
+        {{ user_form.password1 }}<br>    
+    </div>
+    <div class="form-group">
+        {{ user_form.password2.errors }}
+        <label>Confirmação de Senha:</label> 
+        {{ user_form.password2 }}<br>
+    </div>      
+
+    <input type="submit" value="Cadastrar Usuário" class="btn btn-primary">
+
+</form></div>
+<style>
+
+
+
+form {
+    background-color: #fff;
+    width: 300px;
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 500px;
+    margin: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.formulario {
+    height: calc(100vh - 110px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
+    border-color: #80bdff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0,123,255,0.25);
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.errorlist {
+    color: red;
+    list-style-type: none;
+    padding-left: 0;
+    font-size: 14px;
+}
+</style>
+{% endblock %}
