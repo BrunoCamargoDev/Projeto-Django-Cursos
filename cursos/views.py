@@ -1,4 +1,5 @@
 # Create your views here.
+import re
 from django.shortcuts import render
 from .models import Curso, Inscricao
 from django.shortcuts import get_object_or_404, redirect
@@ -6,7 +7,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView
-
+from django.contrib import messages
 
 class IndexView(ListView):
     model = Curso
@@ -34,7 +35,11 @@ class InscreverCursoView(ListView):
 
         # Verifica se já está inscrito
 
-        if not Inscricao.objects.filter(usuario=usuario, curso=curso).exits():
+        if not Inscricao.objects.filter(usuario=usuario, curso=curso).exists():
             Inscricao.objects.create(usuario=usuario, curso=curso)
+            messages.success(request, "Sua inscrição foi realizada com sucesso!")
+
+        else:
+            messages.warning(request, "Você já está inscrito nesse curso!")
 
         return redirect('curso_detail', pk=curso_id)
