@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ curso.titulo }}{% endblock %}
+
+{% block content %}
+<h2>{{ curso.titulo }}</h2>
+<p><strong>Descrição:</strong> {{ curso.descricao }}</p>
+<p><strong>Categoria:</strong> {{ curso.categoria.nome }}</p>
+<p><strong>Publico alvo:</strong> {{ curso.publico_alvo }} horas</p>
+<p><strong>Requisitos:</strong> {{ curso.requisitos }}</p>
+<p><strong>Instrutores:</strong></p>
+<ul>
+  {% for instrutor in curso.instrutores.all %}
+    <li>{{ instrutor.nome|title }}</li>
+  {% empty %}
+    <li>Sem instrutores cadastrados.</li>
+  {% endfor %}
+</ul>
+
+{% if user.is_authenticated %}
+  <form method="post" action="{% url 'inscrever_curso' curso.pk %}">
+    {% csrf_token %}
+    <button type="submit" class="btn-azul">Inscrever-se</button>
+  </form>
+{% else %}
+  <p><a href="{% url 'login' %}" class="btn-azul" >Faça login</a> para se inscrever. 
+  <a href="{% url 'index' %}" class= "btn-azul">Voltar</a></p>
+{% endif %}
+
+{% endblock %}

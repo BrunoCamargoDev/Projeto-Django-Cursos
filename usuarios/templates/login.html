@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block content %} <!-- Bloco de conteúdo (identificação Django) -->
 
 <div class="form-container">
     <form method="POST">
@@ -13,6 +13,11 @@
 </div>
 
 <style>
+
+.content {
+    margin-left: 0;
+}
+
 /* Centraliza vertical e horizontalmente */
 .form-container {
     display: flex;
@@ -23,12 +28,17 @@
 
 /* Estilização do formulário */
 form {
-    background-color: white;
+    background-color: rgb(22, 20, 20);
     padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 0 8px rgb(46, 46, 46);
+    width: 350px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
 }
 
 /* Estiliza a tabela do Django form */
@@ -41,10 +51,11 @@ form td {
     padding: 8px 0;
 }
 
+/* Estilização das caixas de entrada de texto (input) */
 input[type="text"],
 input[type="password"],
 input[type="email"] {
-    width: 100%;
+    width: 200px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -52,18 +63,18 @@ input[type="email"] {
 
 /* Botão de login */
 .btn.btn-primary {
-    background-color: #007bff;
+    background: linear-gradient(to right, #0848be, #7da3e6);;
     color: white;
     border: none;
-    padding: 10px 20px;
-    margin-top: 10px;
+    padding: 15px 0px;
+    margin-top: 20px;
     border-radius: 5px;
     cursor: pointer;
-    width: 100%;
+    width: 200px;
 }
 
 .btn.btn-primary:hover {
-    background-color: #0056b3;
+    background: #064487;
 }
 </style>
 

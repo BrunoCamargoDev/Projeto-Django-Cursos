@@ -28,7 +28,7 @@ def login_view(request):
        user = authenticate(request, username=usuario, password=senha)
        if user is not None:
           login(request, user)
-          return redirect('filmes_list')
+          return redirect('index')
        else:   
           login_form = AuthenticationForm()
         
@@ -38,4 +38,4 @@ def login_view(request):
 
 def logout_view(request):
   logout(request)
-  return redirect('filmes_list')
+  return redirect('index')

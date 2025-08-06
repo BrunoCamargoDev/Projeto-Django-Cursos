@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Cursos Disponíveis{% endblock %}
+
+{% block content %}
+<h2>Cursos</h2>
+<div class="card-container">
+    {% for curso in cursos %}
+    <div class="card">
+        <h5>{{ curso.titulo }}</h5>
+        <p>{{ curso.descricao }}</p>
+        <a href="{% url 'curso_detail' curso.pk %}" class="btn-azul" >Ver curso</a>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    .content{
+        margin-left: 20px;
+    }
+    .sidebar {
+        width: 265px;
+    }
+</style>
+
+{% endblock %}
