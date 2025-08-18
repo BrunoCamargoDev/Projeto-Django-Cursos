@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ curso.titulo }} - Acessar Curso{% endblock %}
+
+{% block content %}
+<h2>{{ curso.titulo }}</h2>
+
+<p><strong>Descrição:</strong> {{ curso.descricao }}</p>
+<p><strong>Categoria:</strong> {{ curso.categoria.nome }}</p>
+<p><strong>Instrutores:</strong></p>
+<ul>
+  {% for instrutor in curso.instrutores.all %}
+    <li>{{ instrutor.nome|title }}</li>
+  {% empty %}
+    <li>Sem instrutores cadastrados.</li>
+  {% endfor %}
+</ul>
+
+<hr>
+<h3>Conteúdo do Curso</h3>
+{% if curso.video_id %}
+  <div class="video-wrapper" style="margin:16px 0;">
+    <iframe width="560" height="315"
+            src="https://www.youtube.com/embed/{{ curso.video_id }}"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen></iframe>
+  </div>
+  <a href="https://youtu.be/{{ curso.video_id }}" target="_blank" rel="noopener" class="btn-azul">
+    Assistir no YouTube
+  </a>
+{% endif %}
+
+<a href="{% url 'index' %}" class="btn-azul">Voltar</a>
+{% endblock %}

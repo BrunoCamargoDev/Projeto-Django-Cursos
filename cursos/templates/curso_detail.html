@@ -6,7 +6,7 @@
 <h2>{{ curso.titulo }}</h2>
 <p><strong>Descrição:</strong> {{ curso.descricao }}</p>
 <p><strong>Categoria:</strong> {{ curso.categoria.nome }}</p>
-<p><strong>Publico alvo:</strong> {{ curso.publico_alvo }} horas</p>
+<p><strong>Publico alvo:</strong> {{ curso.publico_alvo }}</p>
 <p><strong>Requisitos:</strong> {{ curso.requisitos }}</p>
 <p><strong>Instrutores:</strong></p>
 <ul>
@@ -17,22 +17,28 @@
   {% endfor %}
 </ul>
 
-{% if user.is_authenticated %}
+{% if user.is_authenticated and ja_inscrito %}
+  <a href="{% url 'acessar_curso' curso.pk %}" class="btn-azul">Ir para o curso</a>
+{% elif user.is_authenticated %}
   <form method="post" action="{% url 'inscrever_curso' curso.pk %}">
     {% csrf_token %}
     <button type="submit" class="btn-azul">Inscrever-se</button>
   </form>
 {% else %}
-  <p><a href="{% url 'login' %}" class="btn-azul" >Faça login</a> para se inscrever. 
-  <a href="{% url 'index' %}" class= "btn-azul">Voltar</a></p>
+  <p>
+    <a href="{% url 'login' %}" class="btn-azul">Faça login</a> para se inscrever.
+    <a href="{% url 'index' %}" class="btn-azul">Voltar</a>
+  </p>
 {% endif %}
 
+
+
 {% if messages %}
- <ul>
-  {% for message in messages %}
-   <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-   {% endfor %}
- </ul>
- {% endif %}
+  <ul>
+    {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
 
 {% endblock %}

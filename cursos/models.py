@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 # Crie seus modelos aqui!
 
 class Categoria(models.Model):
@@ -16,6 +17,11 @@ class Instrutor(models.Model):
 
     def __str__(self):
         return self.nome
+    
+youtube_id_validator = RegexValidator(
+    regex=r'^[A-Za-z0-9_-]{11}$',
+    message='Informe apenas o ID do youtube (11 caracteres)' 
+)
 
 class Curso(models.Model):
     titulo = models.CharField(max_length=200)
@@ -25,6 +31,12 @@ class Curso(models.Model):
     instrutores = models.ManyToManyField(Instrutor, related_name='cursos')
     publico_alvo = models.TextField(blank=True)
     requisitos = models.TextField(blank=True)
+    video_id = models.CharField(
+        max_length=11,
+        blank=True, null=True,
+        validators=[youtube_id_validator],
+        help_text="Cole apenas o ID."
+    )
 
     def __str__(self):
         return self.titulo

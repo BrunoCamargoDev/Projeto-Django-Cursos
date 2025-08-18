@@ -13,14 +13,20 @@ class IndexView(ListView):
     model = Curso
     template_name = 'index.html'
     context_object_name = 'cursos'
+
     def get_queryset(self):
-        queryset = super().get_queryset().order_by('titulo')
+        if self.request.user.is_authenticated:
+            qs = Curso.objects.filter(Inscricao__usuario=self.request.user)
+        
+        else:
+            qs= Curso.objects.all()
+
         titulo = self.request.GET.get('titulo')
 
         if titulo:
-            queryset = queryset.filter(titulo__icontains=titulo)
+            qs = qs.filter(titulo__icontains=titulo)
 
-        return queryset
+        return qs.order_by('titulo').select_related('categoria').prefetch_related('')
 
 class CursoDetailView(DetailView):
     model = Curso

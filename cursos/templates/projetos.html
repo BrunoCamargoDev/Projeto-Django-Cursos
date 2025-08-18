@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Projetos{% endblock %}
+
+{% block content %}
+  <h2>Projetos Disponíveis</h2>
+  <div class="card-container">
+    {% for projeto in projetos %}
+      <div class="card">
+        <h5>{{ projeto.nome }}</h5>
+        <a href="{{ projeto.link }}" target="_blank" class="btn-azul">Ver no GitHub</a>
+      </div>
+    {% empty %}
+      <p>Nenhum projeto disponível no momento.</p>
+    {% endfor %}
+  </div>
+{% endblock %}
