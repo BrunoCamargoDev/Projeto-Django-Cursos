@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cursos',
     'usuarios',
+    'notificacoes',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,20 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'config.urls'
+
+LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = '/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = ''
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+
+DEFAULT_FROM_EMAIL = ''
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 TEMPLATES = [
     {

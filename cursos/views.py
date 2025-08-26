@@ -5,6 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, TemplateView
 from django.contrib import messages
 from django.views import View
+from notificacoes.email_utils import enviar_email_confirmacao_inscricao
 # from notificacoes.onesignal import notificar_usuario_onesignal
 
 class IndexView(ListView):
@@ -19,7 +20,7 @@ class IndexView(ListView):
         else:
             qs = Curso.objects.all()
 
-        titulo = self.request.GET.get('titulo')
+        titulo = self.request.GET.get('titulo') 
         if titulo:
             qs = qs.filter(titulo__icontains=titulo)
 
@@ -75,6 +76,11 @@ class InscreverCursoView(View):
         else:
             Inscricao.objects.create(usuario=usuario, curso=curso)
             messages.success(request, 'Inscrição realizada com sucesso!')
+            
+            try: 
+                enviar_email_confirmacao_inscricao(request, usuario, curso)
+            except Exception as e:
+                messages.info(request, f'Não foi possível enviar o e-mail: {e}')
 
         return redirect('curso_detail', pk=curso_id)
 

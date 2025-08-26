@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+  <body style="font-family: Arial, sans-serif;">
+    <h2>Inscrição confirmada</h2>
+    <p>Olá, {{ usuario.get_full_name|default:usuario.username }}!</p>
+    <p>Sua inscrição no curso <strong>{{ curso.titulo }}</strong> foi confirmada.</p>
+    <p>
+      <a href="{{ url_acesso }}" style="display:inline-block;padding:10px 16px;background:#0d6efd;color:#fff;text-decoration:none;border-radius:6px;">
+        Acessar curso
+      </a>
+    </p>
+    <hr>
+    <small>EtecTech - Este e-mail foi enviado automaticamente</small>
+  </body>
+</html>
+

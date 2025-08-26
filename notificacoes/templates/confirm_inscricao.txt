@@ -1,0 +1,6 @@
+Inscrição confirmada
+
+Olá, {{ usuario.get_full_name|default:usuario.username }}!
+Sua inscrição no curso "{{ curso.titulo }}" foi confirmada.
+
+Acesse: {{ url_acesso }}
