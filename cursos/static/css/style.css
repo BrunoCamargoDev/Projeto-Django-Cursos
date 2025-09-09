@@ -6,12 +6,10 @@ body {
     color: #fff;
 }
 
-/* Flex container que organiza o layout principal */
 .container {
     display: flex;
 }
 
-/* Menu lateral */
 .sidebar {
     width: 220px;
     height: 100vh;
@@ -22,14 +20,12 @@ body {
     justify-content: space-between;
 }
 
-/* Área principal */
 .content {
     flex-grow: 1;
     padding: 20px;
     color: white;
 }
 
-/* Estilo do menu */
 .menu-items a {
     display: block;
     margin-bottom: 10px;
@@ -37,12 +33,10 @@ body {
     text-decoration: none;
 }
 
-/* Rodapé da sidebar com nome do usuário */
 .user-info {
     color: #ccc;
     font-size: 13px;
 }
-
 
 .sidebar h4 {
     text-align: center;
@@ -94,7 +88,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin-left: 220px; /* distância da sidebar */
+    margin-left: 220px; 
 }
 
 .login-box {
@@ -131,33 +125,29 @@ body {
     border-radius: 4px;
 }
 
-.btn-login {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+.acoes{
+  display:flex;
+  align-items:center;
+  gap:12px;        
+  flex-wrap:wrap;  
 }
 
-.btn-login:hover {
-    background-color: #0056b3;
+.acoes form{ margin:0; } 
+
+.btn{
+  display:inline-block;
+  padding:10px 16px;
+  border:0;
+  border-radius:6px;
+  text-decoration:none;
+  font-weight:600;
+  cursor:pointer;
+  color:#fff;
+  font-size: 16px;
 }
 
-.btn-azul {
-    background-color: #007bff;     
-    color: white;                  
-    padding: 10px 20px;           
-    border: none;                 
-    border-radius: 5px;         
-    text-decoration: none;       
-    display: inline-block;       
-    font-size: 14px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-}
+.btn-azul{ background:#0d6efd; }
+.btn-azul:hover{ opacity:.7; }
 
-.btn-azul:hover {
-    background-color: #0056b3;    
-}
+.btn-vermelho{ background:#dc3545; }
+.btn-vermelho:hover{ opacity:.7; }

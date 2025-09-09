@@ -1,11 +1,14 @@
 from .models import Curso, Inscricao
 from django.shortcuts import get_object_or_404, redirect
+from django.http import FileResponse, Http404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, TemplateView
 from django.contrib import messages
 from django.views import View
 from notificacoes.email_utils import enviar_email_confirmacao_inscricao
+import os 
 # from notificacoes.onesignal import notificar_usuario_onesignal
 
 class IndexView(ListView):
@@ -99,3 +102,53 @@ class ProjetosView(TemplateView):
         ]
         return ctx
 
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class CancelarCursoView(View):
+    def post(self, request, curso_id):
+        curso = get_object_or_404(Curso, pk=curso_id)
+        usuario = request.user
+
+        inscricao = Inscricao.objects.filter(usuario=usuario, curso=curso).first()
+        if inscricao:
+            Inscricao.delete()
+            messages.success(request, 'Inscrição cancelada com sucesso!')
+
+        return redirect('curso_detail', pk=curso_id)
+
+
+class BaixarMaterialCursoView(LoginRequiredMixin, View):
+    login_url = "login"
+
+    def get(self, request, pk):
+        curso = get_object_or_404(Curso, pk=pk)
+
+        inscrito = Inscricao.objects.filter(usuario=request.user, curso=curso).exists()
+
+        if not inscrito:
+            messages.warning(request, "Você precisa estar matrículado para baixar o material.")
+            return redirect("curso_detail", pk=curso.pk)
+
+        if not curso.material_pdf:
+            raise Http404("Material não encontrado.")
+
+        filename = os.path.basename(curso.material_pdf.name)
+        return FileResponse(curso.material_pdf.open("rb"), as_attachment=True, filename = filename)
+
+class BaixarCertificadoCursoView(LoginRequiredMixin, View):
+    login_url = "login"
+
+    def get(self, request, pk):
+        curso = get_object_or_404(Curso, pk=pk)
+
+        inscrito = Inscricao.objects.filter(usuario=request.user, curso=curso).exists()
+
+        if not inscrito:
+            messages.warning(request, "Você precisa estar matrículado para baixar o certificado.")
+            return redirect("curso_detail", pk=curso.pk)
+
+        if not curso.material_pdf:
+            raise Http404("certificado não encontrado.")
+
+        filename = os.path.basename(curso.certificado_pdf.name)
+        return FileResponse(curso.certificado_pdf.open("rb"), as_attachment=True, filename = filename)

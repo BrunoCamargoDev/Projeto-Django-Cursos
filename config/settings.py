@@ -12,21 +12,22 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+environ.Env.read_env(BASE_DIR / ".env")
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-3+p5xtnp1i$ed$*g&gcg=tbyxu759a-i+5e!vlumy4^9-p11w^'
+SECRET_KEY = environ.Env().str("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = environ.Env().list("ALLOWED_HOSTS")
 
 
 # Application definition
@@ -58,15 +59,15 @@ ROOT_URLCONF = 'config.urls'
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = '/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = ''
+EMAIL_BACKEND = environ.Env().str("EMAIL_BACKEND")
+EMAIL_HOST = environ.Env().str("EMAIL_HOST")
+EMAIL_PORT = environ.Env().int("EMAIL_PORT")
 EMAIL_USE_TLS = True
 
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_USER = environ.Env().str("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = environ.Env().str("EMAIL_HOST_PASSWORD")
 
-DEFAULT_FROM_EMAIL = ''
+DEFAULT_FROM_EMAIL = f"Etec Tech <{EMAIL_HOST_USER}>"
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 TEMPLATES = [

@@ -27,10 +27,18 @@
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowfullscreen></iframe>
   </div>
-  <a href="https://youtu.be/{{ curso.video_id }}" target="_blank" rel="noopener" class="btn-azul">
+  <a href="https://youtu.be/{{ curso.video_id }}" target="_blank" rel="noopener" class="btn btn-azul">
     Assistir no YouTube
   </a>
 {% endif %}
 
-<a href="{% url 'index' %}" class="btn-azul">Voltar</a>
+{% if curso.material_pdf %}
+<a href="{% url 'baixar_material_curso' curso.pk %}" class="btn btn-azul" style="margin-left: 8px;">Baixar material (PDF)</a>
+{% endif %}
+
+{% if curso.certificado_pdf %}
+<a href="{% url 'baixar_certificado_curso' curso.pk %}" class="btn btn-azul" style="margin-left: 8px;">Baixar certificado (PDF)</a>
+{% endif %}
+
+<a href="{% url 'index' %}" class="btn btn-azul">Voltar</a>
 {% endblock %}

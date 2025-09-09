@@ -31,12 +31,25 @@ class Curso(models.Model):
     instrutores = models.ManyToManyField(Instrutor, related_name='cursos')
     publico_alvo = models.TextField(blank=True)
     requisitos = models.TextField(blank=True)
+    material_pdf = models.FileField(
+        upload_to="materiais/",
+        blank=True,
+        null=True,
+        help_text='PDF do material de apoio do curso'
+    )
     video_id = models.CharField(
         max_length=11,
         blank=True, null=True,
         validators=[youtube_id_validator],
         help_text="Cole apenas o ID."
     )
+    certificado_pdf = models.FileField(
+        upload_to="certificados/",
+        blank=True,
+        null=True,
+        help_text='Certificado de conclusão de curso'
+    )
+    
 
     def __str__(self):
         return self.titulo

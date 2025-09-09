@@ -18,16 +18,25 @@
 </ul>
 
 {% if user.is_authenticated and ja_inscrito %}
-  <a href="{% url 'acessar_curso' curso.pk %}" class="btn-azul">Ir para o curso</a>
+<div class="acoes">
+  <a href="{% url 'acessar_curso' curso.pk %}" class="btn btn-azul">Ir para o curso</a>
+  <form method="post" action="{% url 'cancelar_curso' curso.pk %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-vermelho" onclick="return confirm('tem certeza que deseja cancelar sua matrícula?')">
+      Cancelar matrícula
+    </button>
+    </form>
+</div>
 {% elif user.is_authenticated %}
   <form method="post" action="{% url 'inscrever_curso' curso.pk %}">
-    {% csrf_token %}
+    
     <button type="submit" class="btn-azul">Inscrever-se</button>
   </form>
+
 {% else %}
   <p>
-    <a href="{% url 'login' %}" class="btn-azul">Faça login</a> para se inscrever.
-    <a href="{% url 'index' %}" class="btn-azul">Voltar</a>
+    <a href="{% url 'login' %}" class="btn btn-azul">Faça login</a> para se inscrever.
+    <a href="{% url 'index' %}" class="btn btn-azul">Voltar</a>
   </p>
 {% endif %}
 
