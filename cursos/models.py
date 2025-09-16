@@ -75,8 +75,8 @@ class Inscricao(models.Model):
     data_inscricao = models.DateTimeField(auto_now_add=True)
     progresso = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)  
     concluido = models.BooleanField(default=False)
-    # data_conclusao = models.DateField(null=True,blank=True)
-    # codigo_certificado = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, null=True, blank=True)
+    data_conclusao = models.DateField(null=True,blank=True)
+    codigo_certificado = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, null=True, blank=True)
 
     class Meta:
         constraints = [
