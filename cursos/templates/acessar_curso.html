@@ -36,9 +36,23 @@
 <a href="{% url 'baixar_material_curso' curso.pk %}" class="btn btn-azul" style="margin-left: 8px;">Baixar material (PDF)</a>
 {% endif %}
 
-{% if curso.certificado_pdf %}
-<a href="{% url 'baixar_certificado_curso' curso.pk %}" class="btn btn-azul" style="margin-left: 8px;">Baixar certificado (PDF)</a>
+{% if inscricao %}
+<form method="post" 
+  action="{% url 'concluir_curso' curso.pk %}"
+  class="linha-concluir">
+  {% csrf_token %}
+  <label class="check-concluir">
+    <input type="checkbox" 
+    name="concluido"
+      {% if inscricao.concluido %}
+        checked
+        {% endif %}
+        onchange="this.form.submit()">
+        Marcar como concluido
+  </label>
+</form>
 {% endif %}
+
 
 <a href="{% url 'index' %}" class="btn btn-azul">Voltar</a>
 {% endblock %}

@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
@@ -43,14 +44,7 @@ class Curso(models.Model):
         validators=[youtube_id_validator],
         help_text="Cole apenas o ID."
     )
-    certificado_pdf = models.FileField(
-        upload_to="certificados/",
-        blank=True,
-        null=True,
-        help_text='Certificado de conclusão de curso'
-    )
     
-
     def __str__(self):
         return self.titulo
 
@@ -81,6 +75,8 @@ class Inscricao(models.Model):
     data_inscricao = models.DateTimeField(auto_now_add=True)
     progresso = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)  
     concluido = models.BooleanField(default=False)
+    # data_conclusao = models.DateField(null=True,blank=True)
+    # codigo_certificado = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, null=True, blank=True)
 
     class Meta:
         constraints = [
