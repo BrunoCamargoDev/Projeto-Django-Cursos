@@ -78,6 +78,10 @@ class Inscricao(models.Model):
     data_conclusao = models.DateField(null=True,blank=True)
     codigo_certificado = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, null=True, blank=True)
 
+    pago_em = models.DateField(null=True, blank=True)
+    expira_em = models.DateField(null=True, blank=True)
+    ativo = models.BooleanField(default=False)
+
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['usuario', 'curso'], name='inscricao_unica')

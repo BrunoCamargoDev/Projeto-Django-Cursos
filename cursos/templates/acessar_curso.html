@@ -16,6 +16,19 @@
   {% endfor %}
 </ul>
 
+{% if inscricao %}
+  {% if inscricao.ativa %}
+    <p style="margin:8px 0;">
+      Acesso válido até <strong>{{ inscricao.expira_em|date:"d/m/Y" }}</strong>
+      ({{ inscricao.dias_restantes }} dias restantes).
+    </p>
+  {% else %}
+    <div class="alerta">
+      Seu acesso está expirado.
+    </div>
+  {% endif %}
+{% endif %}
+
 <hr>
 <h3>Conteúdo do Curso</h3>
 {% if curso.video_id %}
@@ -33,26 +46,33 @@
 {% endif %}
 
 {% if curso.material_pdf %}
-<a href="{% url 'baixar_material_curso' curso.pk %}" class="btn btn-azul" style="margin-left: 8px;">Baixar material (PDF)</a>
+  <a href="{% url 'baixar_material_curso' curso.pk %}" 
+     class="btn btn-azul" style="margin-left:8px;">
+     Baixar material (PDF)
+  </a>
 {% endif %}
 
-{% if inscricao %}
-<form method="post" 
-  action="{% url 'concluir_curso' curso.pk %}"
-  class="linha-concluir">
-  {% csrf_token %}
-  <label class="check-concluir">
-    <input type="checkbox" 
-    name="concluido"
-      {% if inscricao.concluido %}
-        checked
-        {% endif %}
-        onchange="this.form.submit()">
-        Marcar como concluido
-  </label>
-</form>
+{% if inscricao and inscricao.ativa %}
+  <form method="post"
+        action="{% url 'concluir_curso' curso.pk %}" 
+        class="linha-concluir">
+    {% csrf_token %}
+    <label class="check-concluir">
+      <input type="checkbox" 
+             name="concluido"
+             {% if inscricao.concluido %}checked{% endif %}
+             onchange="this.form.submit()">
+      Marcar como concluído
+    </label>
+  </form>
+
+  {% if inscricao.concluido %}
+    <a href="{% url 'certificado_curso' curso.pk %}"
+       class="btn btn-azul">
+       Baixar certificado (PDF)
+    </a>
+  {% endif %}
 {% endif %}
 
-
-<a href="{% url 'index' %}" class="btn btn-azul">Voltar</a>
+<a href="{% url 'index' %}" class="btn btn-azul" style="margin-top:12px;">Voltar</a>
 {% endblock %}

@@ -29,8 +29,8 @@
 </div>
 {% elif user.is_authenticated %}
   <form method="post" action="{% url 'inscrever_curso' curso.pk %}">
-    
-    <button type="submit" class="btn-azul">Inscrever-se</button>
+    {% csrf_token %}
+    <button type="submit" class="btn btn-azul">Inscrever-se</button>
   </form>
 
 {% else %}

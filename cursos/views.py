@@ -13,6 +13,8 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.units import cm
 from notificacoes.email_utils import enviar_email_confirmacao_inscricao
+from django.contrib.staticfiles import finders
+from django.utils.timezone import localdate
 import os 
 # from notificacoes.onesignal import notificar_usuario_onesignal
 
@@ -160,6 +162,12 @@ class CertificadoCursoPDFView(LoginRequiredMixin, View):
         c = canvas.Canvas(buffer, pagesize=landscape(A4))
         w, h = landscape(A4)
 
+        bg_path = finders.find('certificados/fundo.jpg')
+        if not bg_path:
+            raise Http404('Fundo do certificado não encontrado')
+        
+        c.drawImage(bg_path, 0, 0, width=w, height=h, preserveAspectRatio=False, mask='auto')
+
         c.setTitle(f'Certificado - {curso.titulo}')
         c.setFont('Helvetica-Bold', 28)
         c.drawCentredString(w/2, h - 3*cm, 'CERTIFICADO DE CONCLUSÃO')
@@ -193,16 +201,25 @@ class AcessarCursoView(LoginRequiredMixin, DetailView):
 
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if not Inscricao.objects.filter(usuario=request.user, curso=self.object).exists():
-            messages.warning(request, 'Você precisa estar matrículado para acessar este curso.')
+        insc = Inscricao.objects.filter(usuario=request.user, curso=self.object).first()
+        if not insc:
+            messages.warning(request, 'Você precisa estar matriculado para acessar este curso.')
             return redirect('curso_detail', pk=self.object.pk)
+        
+        if not insc.ativo:
+            if insc.expira_em:
+                messages.error(request, f'Seu acesso expirou em {insc.expira_em:%d/%m/%Y}.')
+            else:
+                messages.error(request, 'Seu acesso está bloqueado.')        
+            return redirect('curso_detail', pk=self.object.pk)
+
         return super().dispatch(request, *args, **kwargs)
-    
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['inscricao'] = Inscricao.objects.filter(
             usuario=self.request.user, curso=self.object
-        ).first()
+            ).first()
         return ctx
     
 class ConcluirCursoView(LoginRequiredMixin, View):
