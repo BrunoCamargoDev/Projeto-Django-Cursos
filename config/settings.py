@@ -70,6 +70,11 @@ EMAIL_HOST_PASSWORD = environ.Env().str("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = f"Etec Tech <{EMAIL_HOST_USER}>"
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
+# Pagamentos
+PAGTO_INBOX=environ.Env().str("PAGTO_INBOX", default=str(BASE_DIR/"pagto"/"inbox"))
+PAGTO_ARQUIVADO=environ.Env().str("PAGTO_ARQUIVADO,", default=str(BASE_DIR/"pagto"/"arquivado"))
+PAGTO_ERROS=environ.Env().str("PAGTO_ERROS", default=str(BASE_DIR/"pagto"/"erros"))
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

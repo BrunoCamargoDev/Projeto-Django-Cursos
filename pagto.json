@@ -1,0 +1,21 @@
+{
+  "batch_id": "2025-09-29-001",
+  "generated_at": "2025-09-29T16:10:00-03:00",
+  "payments": [
+    {
+      "tx_id": "A!B@C#1234567890",
+      "user_email": "camargoh670@gmail.com",
+      "curso_titulo": "Administração",
+      "amount": 49.90,
+      "days": 30
+    },
+   {
+      "tx_id": "A1B2C3D4E5F6G7H8I9J0",
+      "user_email": "camargoh670@gmail.com",
+      "curso_titulo": "Administração",
+      "amount": 79.90,
+      "days": 60
+    }
+
+  ]
+}

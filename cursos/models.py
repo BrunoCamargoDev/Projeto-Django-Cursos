@@ -1,8 +1,9 @@
+from datetime import timedelta
 import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
-# Crie seus modelos aqui!
+from django.utils.timezone import localdate, now
 
 class Categoria(models.Model):
     nome = models.CharField(max_length=100)
@@ -21,8 +22,8 @@ class Instrutor(models.Model):
     
 youtube_id_validator = RegexValidator(
     regex=r'^[A-Za-z0-9_-]{11}$',
-    message='Informe apenas o ID do youtube (11 caracteres)' 
-)
+    message='Informe apenas o ID do YouTube (11 caracteres).'
+)    
 
 class Curso(models.Model):
     titulo = models.CharField(max_length=200)
@@ -33,10 +34,10 @@ class Curso(models.Model):
     publico_alvo = models.TextField(blank=True)
     requisitos = models.TextField(blank=True)
     material_pdf = models.FileField(
-        upload_to="materiais/",
+        upload_to="materiais/",  
         blank=True,
         null=True,
-        help_text='PDF do material de apoio do curso'
+        help_text="PDF de material de apoio do curso"
     )
     video_id = models.CharField(
         max_length=11,
@@ -44,7 +45,7 @@ class Curso(models.Model):
         validators=[youtube_id_validator],
         help_text="Cole apenas o ID."
     )
-    
+
     def __str__(self):
         return self.titulo
 
@@ -59,15 +60,15 @@ class Modulo(models.Model):
     def __str__(self):
         return f"{self.titulo} - {self.curso.titulo}"
 
-class Aula(models.Model):
-    modulo = models.ForeignKey(Modulo, on_delete=models.PROTECT, related_name='aulas')
-    titulo = models.CharField(max_length=200)
-    conteudo = models.TextField()
-    video_url = models.URLField(blank=True, null=True)  
-    material_extra = models.FileField(upload_to='docs/', blank=True, null=True)
+# class Aula(models.Model):
+#     modulo = models.ForeignKey(Modulo, on_delete=models.PROTECT, related_name='aulas')
+#     titulo = models.CharField(max_length=200)
+#     conteudo = models.TextField()
+#     video_url = models.URLField(blank=True, null=True)  
+#     material_extra = models.FileField(upload_to='docs/', blank=True, null=True)
 
-    def __str__(self):
-        return f"{self.titulo} ({self.modulo.titulo})"
+#     def __str__(self):
+#         return f"{self.titulo} ({self.modulo.titulo})"
 
 class Inscricao(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.PROTECT)
@@ -75,12 +76,15 @@ class Inscricao(models.Model):
     data_inscricao = models.DateTimeField(auto_now_add=True)
     progresso = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)  
     concluido = models.BooleanField(default=False)
-    data_conclusao = models.DateField(null=True,blank=True)
-    codigo_certificado = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, null=True, blank=True)
-
-    pago_em = models.DateField(null=True, blank=True)
-    expira_em = models.DateField(null=True, blank=True)
-    ativo = models.BooleanField(default=False)
+    data_conclusao = models.DateField(null=True, blank=True)
+    codigo_certificado = models.UUIDField(default=uuid.uuid4, 
+                                          unique=True,
+                                          editable=False, 
+                                          null=True,
+                                          blank=True)
+    pago_em   = models.DateField(null=True, blank=True)  
+    expira_em = models.DateField(null=True, blank=True)      
+    ativo     = models.BooleanField(default=False)     
 
     class Meta:
         constraints = [
@@ -90,3 +94,28 @@ class Inscricao(models.Model):
     def __str__(self):
         return f"{self.usuario.username} - {self.curso.titulo}"
 
+    @property
+    def ativa(self) -> bool:
+        return bool(self.ativo and self.expira_em and self.expira_em >= localdate())
+
+    @property
+    def dias_restantes(self):
+        if not self.expira_em:
+            return None
+        return (self.expira_em - localdate()).days
+
+    def ativar_por_30_dias(self, quando=None):
+        hoje = localdate()
+        base = max(self.expira_em or hoje, hoje)
+        self.expira_em = base + timedelta(days=30)
+        self.pago_em = quando or now()
+        self.ativo = True
+        self.save(update_fields=['expira_em', 'pago_em', 'ativo'])
+
+class TransacaoImportada(models.Model):
+    tx_id = models.CharField(max_length=100, unique=True)
+    criado_em = models.DateTimeField(auto_now_add=True)
+    raw = models.JSONField(null=True, blank=True)
+
+    def __str__(self):
+        return self.tx_id        
