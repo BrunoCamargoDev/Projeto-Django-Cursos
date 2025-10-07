@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Posts de teste (JSONPlaceholder)</h1>
+  <p>Exemplo de consumo de API externa.</p>
+
+  <ul>
+    {% for p in posts %}
+      <li style="margin-bottom:12px">
+        <strong>{{ p.title }}</strong><br>
+        {{ p.body|linebreaksbr }}<br>
+        <a href="{% url 'proxy_post' p.id %}">Ver JSON via proxy (server)</a>
+      </li>
+    {% empty %}
+      <li>Nenhum post disponível.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

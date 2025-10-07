@@ -1,8 +1,9 @@
+from django.core.cache import cache
 from django.utils import timezone
 from .models import Curso, Inscricao
 from io import BytesIO
-from django.shortcuts import get_object_or_404, redirect
-from django.http import FileResponse, Http404
+from django.shortcuts import get_object_or_404, redirect, render
+from django.http import FileResponse, Http404, JsonResponse, HttpResponseServerError
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
@@ -16,6 +17,7 @@ from notificacoes.email_utils import enviar_email_confirmacao_inscricao
 from django.contrib.staticfiles import finders
 from django.utils.timezone import localdate
 import os 
+import requests
 # from notificacoes.onesignal import notificar_usuario_onesignal
 
 class IndexView(ListView):
@@ -242,3 +244,27 @@ class ConcluirCursoView(LoginRequiredMixin, View):
         insc.save()
         messages.success(request, msg)
         return redirect('acessar_curso', pk=curso.pk)
+    
+EXTERNAL_BASE = 'https://jsonplaceholder.typicode.com'
+
+def busca_posts(request):
+    cache_key = 'jsonplaceholder_posts'
+    posts = cache.get(cache_key)
+    if posts is None:
+        try:
+            resp = requests.get(f'{EXTERNAL_BASE}/posts', timeout= 5)
+            resp.raise_for_status()
+            posts = resp.json()[:20]
+            cache.set(cache_key,posts,timeout=60)
+        except Exception as e:
+            return HttpResponseServerError(f'Erro ao acessar API externa: {e}')
+    return render(request, 'busca_posts.html', {'posts': posts})
+    
+def proxy_post(request, post_id):
+    try:
+        resp = requests.get(f'{EXTERNAL_BASE}/posts/{post_id}', timeout = 5)
+        resp.raise_for_status()
+        data = resp.json()
+    except request.HTTPError as e:
+        return JsonResponse({'error': 'Erro interno ao contratar a API', 'Details':str(e)}, status=500)
+    return JsonResponse(data)

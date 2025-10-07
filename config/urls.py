@@ -5,6 +5,7 @@ from cursos.views import BaixarMaterialCursoView, CertificadoCursoPDFView, Curso
 from usuarios.views import usuario_view, login_view, logout_view
 from django.conf.urls.static import static
 from django.conf import settings
+from cursos import views
 # from notificacoes.views import registrar_dispositivo
 
 urlpatterns = [
@@ -22,5 +23,7 @@ urlpatterns = [
     path('curso/<int:pk>/concluir', ConcluirCursoView.as_view(), name='concluir_curso'),
     path("projetos/", ProjetosView.as_view(), name="projetos"),
     # path('api/devices/register/', registrar_dispositivo, name='registrar_dispositivo'),
-    path("curso/<int:pk>/material/download/", BaixarMaterialCursoView.as_view(), name="baixar_material_curso")
+    path("curso/<int:pk>/material/download/", BaixarMaterialCursoView.as_view(), name="baixar_material_curso"),
+    path('cursos/busca-posts/', views.busca_posts, name='busca_posts'),
+    path('api/proxy/posts/<int:post_id>/', views.proxy_post, name='proxy_post')
 ]   + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
